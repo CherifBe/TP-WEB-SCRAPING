@@ -1,118 +1,90 @@
-Genshin Character Scraper & API
-This project provides a FastAPI backend that:
+# Genshin Impact Character Scraper & API
 
-Scrapes Genshin Impact character data from the Genshin Impact Fandom Wiki.
-Stores the scraped data in a CSV file.
-Serves the data as a JSON API endpoint.
-Table of Contents
-Project Overview
-Project Structure
-Requirements
-Installation
-Usage
-1. Run the Scraping Script
-2. Run the FastAPI Server
-3. Access the Data
-Customization
-Contributing
-License
-Project Overview
-This project:
+This project **scrapes Genshin Impact character data** from the Fandom wiki and **exposes** it through a **FastAPI** endpoint. It retrieves character info (icon URL, name, rarity, element, weapon, region, model type) and stores everything in a local CSV file.
 
-Scrapes https://genshin-impact.fandom.com/wiki/Characters to obtain a table of characters, including:
+---
 
-Icon URL
-Name
-Quality (e.g., 4* or 5*)
-Element
-Weapon
-Region
-Model Type
-Saves the scraped data to genshin_characters.csv.
+## Table of Contents
 
-Exposes an API endpoint (/genshin_characters) that returns the CSV data as JSON.
+1. [Features](#features)  
+2. [Project Structure](#project-structure)  
+3. [Requirements](#requirements)  
+4. [Installation & Usage](#installation--usage)  
+5. [API Endpoints](#api-endpoints)  
+6. [Customization](#customization)  
+7. [License](#license)  
 
-Tech stack:
+---
 
-requests + BeautifulSoup for HTML scraping
-CSV for data storage
-FastAPI for the API
-CORS middleware enabled to allow calls from, for example, http://localhost:3000.
-Project Structure
-graphql
+## Features
+
+- **Scraping**:  
+  - Pulls data from the [Genshin Impact Fandom Wiki](https://genshin-impact.fandom.com/wiki/Characters).  
+  - Extracts character info into a CSV file (`genshin_characters.csv` by default).
+
+- **FastAPI Backend**:  
+  - Serves a JSON endpoint `/genshin_characters` to display the scraped data.  
+  - Uses CORS middleware to allow requests from `http://localhost:3000` by default (modifiable).
+
+---
+
+## Project Structure
+
+. ├── main.py # The main file containing scraping + FastAPI code ├── genshin_characters.csv # CSV file generated after scraping ├── requirements.txt # (Optional) Python dependencies file └── README.md # Project README (this file)
+
+markdown
 Copy
-.
-├── main.py                  # The primary FastAPI + scraping script
-├── genshin_characters.csv   # Auto-generated CSV after scraping (ignored initially if not existing)
-├── requirements.txt         # (Optional) Might contain the Python dependencies
-├── README.md                # Project documentation (this file)
-└── ... (other project files as needed)
-Requirements
-Python 3.7+ (tested on newer versions as well)
-pip (comes with most Python installations)
-Below are the main dependencies:
 
-requests (HTTP requests)
-beautifulsoup4 (HTML parsing)
-fastapi (the API framework)
-uvicorn (ASGI server to run FastAPI)
-csv (Python standard library, no extra install needed)
-If you want to use a virtual environment, you can create and activate it:
+> **Note**: If you rename `main.py`, ensure you update any command references accordingly.
 
-bash
-Copy
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-Then install dependencies (if you have a requirements.txt):
+---
+
+## Requirements
+
+- **Python 3.7+**  
+- **pip** (to install packages)
+
+Recommended libraries (install them individually or via `requirements.txt`):
+- `requests`
+- `beautifulsoup4`
+- `fastapi`
+- `uvicorn`
+- `python-multipart` (sometimes needed by FastAPI for form data)
+- `csv` (part of the standard library, no extra installation needed)
+
+---
+
+## Installation & Usage
+
+1. **Clone** or **download** this repository.
+
+2. **Install** dependencies:  
+   ```bash
+   pip install requests beautifulsoup4 fastapi uvicorn
+Or, if you have a requirements.txt, simply run:
 
 bash
 Copy
 pip install -r requirements.txt
-Or install them individually:
-
-bash
-Copy
-pip install requests beautifulsoup4 fastapi uvicorn
-Installation
-Clone or download the repository.
-
-Install dependencies (see above). For example:
-
-bash
-Copy
-pip install requests beautifulsoup4 fastapi uvicorn
-(Optional) Create a .env or environment variables if you need a custom configuration. By default, no extra environment variables are needed.
-
-Usage
-1. Run the Scraping Script
-To scrape the Genshin characters page and save the data in genshin_characters.csv, you can just run the script (assuming it’s named main.py):
+Run the code (assuming file is main.py):
 
 bash
 Copy
 python main.py
-During execution:
-
-The script sends a GET request to Genshin Characters Wiki.
-It locates the main table with CSS classes "article-table sortable alternating-colors-table".
-Extracts each row’s columns, including the icon image URL, character name, quality (stars), element, weapon, region, and model type.
-Writes this data to a CSV file named genshin_characters.csv.
-2. Run the FastAPI Server
-After scraping is done, the FastAPI application is also defined in main.py. You can run it using uvicorn:
+This will:
+Scrape the Genshin Impact characters from the wiki.
+Generate/update genshin_characters.csv with scraped data.
+Start a FastAPI server on http://127.0.0.1:8000 (if you see no server logs, it means only the scraping ran—see next step for running FastAPI explicitly).
+(Alternative) Run FastAPI using Uvicorn:
 
 bash
 Copy
 uvicorn main:app --reload
-Note: If your file is named differently, adjust the command. The pattern is uvicorn <python-file>:<FastAPI-object> --reload.
-
-By default, uvicorn serves on http://127.0.0.1:8000.
-3. Access the Data
-The API endpoint to get the characters in JSON format is:
-
-bash
-Copy
+By default, Uvicorn listens on http://127.0.0.1:8000.
+If you only want to re-run the scraping, just re-run python main.py (the script will do both by default, depending on how it’s organized).
+API Endpoints
 GET /genshin_characters
-So, open http://127.0.0.1:8000/genshin_characters in your browser or make a request via curl or Postman. If the CSV file exists, you’ll see a JSON response like:
-
+Returns a JSON object with the contents of the genshin_characters.csv. Example response:
 json
 Copy
 {
@@ -129,41 +101,20 @@ Copy
     ...
   ]
 }
-If the CSV file isn’t found (meaning the scrape didn’t run or failed), you’ll get a 404 JSON response with an error message.
-
+If genshin_characters.csv is missing, you get a 404 with an error message.
 Customization
-Output CSV: Change the filename by editing the output_file variable in the script:
+CSV File Name
 
-python
-Copy
-output_file = "some_other_file.csv"
-CORS Configuration:
-In main.py, we’ve set allow_origins=["http://localhost:3000"]. If you want to call this API from a different domain or multiple domains, update the list as needed:
+Default is "genshin_characters.csv". Change the output_file variable in the script if needed.
+CORS Settings
 
-python
-Copy
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://my-other-site.com", "http://another-host:8080"],
-    ...
-)
-Scraping Logic:
+By default, only "http://localhost:3000" is allowed. Adjust in the app.add_middleware(CORSMiddleware, ...) section to fit your needs.
+Scraping Logic
 
-If the wiki changes its HTML structure, you might need to update the selectors:
-python
-Copy
-table = soup.find("table", class_="article-table sortable alternating-colors-table")
-Adjust how you parse columns or how many columns you extract.
-Error Handling:
-
-If any field is missing in a row, the script prints a message or sets a default string.
-You could add more robust error handling or logging as needed.
-Contributing
-Fork the repository.
-Create a feature branch.
-Commit your changes.
-Open a Pull Request.
-We welcome improvements for parsing, error handling, or additional endpoints.
-
+The code looks for a table with class "article-table sortable alternating-colors-table". If the wiki changes structure, update the selector accordingly.
+If the icon["data-src"] path changes, adapt the slicing or processing in the script.
 License
-This project is released under the MIT License (or whichever license you choose). Please see the repository’s LICENSE file for details.
+You can choose an open-source license (e.g. MIT) or keep it private. Include a LICENSE file if distributing.
+
+Feel free to modify or reuse this project as needed.
+Enjoy scraping Genshin data and building interesting applications with it!
