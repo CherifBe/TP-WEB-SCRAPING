@@ -1,120 +1,101 @@
-# Genshin Impact Character Scraper & API
+# Genshin Impact Character Scraper
 
-This project **scrapes Genshin Impact character data** from the Fandom wiki and **exposes** it through a **FastAPI** endpoint. It retrieves character info (icon URL, name, rarity, element, weapon, region, model type) and stores everything in a local CSV file.
-
----
-
-## Table of Contents
-
-1. [Features](#features)  
-2. [Project Structure](#project-structure)  
-3. [Requirements](#requirements)  
-4. [Installation & Usage](#installation--usage)  
-5. [API Endpoints](#api-endpoints)  
-6. [Customization](#customization)  
-7. [License](#license)  
-
----
+This project is a FastAPI-based application that scrapes character data from the Genshin Impact Fandom website and serves it through an API. It also saves the data to a CSV file for further use.
 
 ## Features
 
-- **Scraping**:  
-  - Pulls data from the [Genshin Impact Fandom Wiki](https://genshin-impact.fandom.com/wiki/Characters).  
-  - Extracts character info into a CSV file (`genshin_characters.csv` by default).
-
-- **FastAPI Backend**:  
-  - Serves a JSON endpoint `/genshin_characters` to display the scraped data.  
-  - Uses CORS middleware to allow requests from `http://localhost:3000` by default (modifiable).
-
----
-
-## Project Structure
-
-. ├── main.py # The main file containing scraping + FastAPI code ├── genshin_characters.csv # CSV file generated after scraping ├── requirements.txt # (Optional) Python dependencies file └── README.md # Project README (this file)
-
-markdown
-Copy
-
-> **Note**: If you rename `main.py`, ensure you update any command references accordingly.
-
----
+- Scrapes Genshin Impact character data, including:
+  - Icon URL
+  - Name
+  - Quality
+  - Element
+  - Weapon
+  - Region
+  - Model type
+- Saves the scraped data to a CSV file (`genshin_characters.csv`).
+- Provides an API endpoint to retrieve character data in JSON format.
+- CORS middleware to allow cross-origin requests (e.g., for use with a frontend).
 
 ## Requirements
 
-- **Python 3.7+**  
-- **pip** (to install packages)
-
-Recommended libraries (install them individually or via `requirements.txt`):
+- Python 3.8+
 - `requests`
 - `beautifulsoup4`
 - `fastapi`
 - `uvicorn`
-- `python-multipart` (sometimes needed by FastAPI for form data)
-- `csv` (part of the standard library, no extra installation needed)
 
----
+## Installation
 
-## Installation & Usage
+1. Clone the repository:
 
-1. **Clone** or **download** this repository.
-
-2. **Install** dependencies:  
    ```bash
-   pip install requests beautifulsoup4 fastapi uvicorn
-Or, if you have a requirements.txt, simply run:
+   git clone <repository_url>
+   cd <repository_folder>
+   ```
 
-bash
-Copy
-pip install -r requirements.txt
-Run the code (assuming file is main.py):
+2. Install dependencies:
 
-bash
-Copy
-python main.py
-This will:
-Scrape the Genshin Impact characters from the wiki.
-Generate/update genshin_characters.csv with scraped data.
-Start a FastAPI server on http://127.0.0.1:8000 (if you see no server logs, it means only the scraping ran—see next step for running FastAPI explicitly).
-(Alternative) Run FastAPI using Uvicorn:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-bash
-Copy
-uvicorn main:app --reload
-By default, Uvicorn listens on http://127.0.0.1:8000.
-If you only want to re-run the scraping, just re-run python main.py (the script will do both by default, depending on how it’s organized).
-API Endpoints
-GET /genshin_characters
-Returns a JSON object with the contents of the genshin_characters.csv. Example response:
-json
-Copy
-{
-  "characters": [
-    {
-      "Icon": "...",
-      "Name": "Amber",
-      "Quality": "4-Star",
-      "Element": "Pyro",
-      "Weapon": "Bow",
-      "Region": "Mondstadt",
-      "Model Type": "Medium Female"
-    },
-    ...
-  ]
-}
-If genshin_characters.csv is missing, you get a 404 with an error message.
-Customization
-CSV File Name
+3. Run the application:
 
-Default is "genshin_characters.csv". Change the output_file variable in the script if needed.
-CORS Settings
+   ```bash
+   uvicorn main:app --reload
+   ```
 
-By default, only "http://localhost:3000" is allowed. Adjust in the app.add_middleware(CORSMiddleware, ...) section to fit your needs.
-Scraping Logic
+4. Open your browser and navigate to:
 
-The code looks for a table with class "article-table sortable alternating-colors-table". If the wiki changes structure, update the selector accordingly.
-If the icon["data-src"] path changes, adapt the slicing or processing in the script.
-License
-You can choose an open-source license (e.g. MIT) or keep it private. Include a LICENSE file if distributing.
+   - API documentation: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+   - API endpoint: [http://127.0.0.1:8000/genshin_characters](http://127.0.0.1:8000/genshin_characters)
 
-Feel free to modify or reuse this project as needed.
-Enjoy scraping Genshin data and building interesting applications with it!
+## Usage
+
+### Scraping Data
+
+The scraping functionality is handled by the `scrape_genshin_characters_to_csv` function. It:
+
+1. Fetches the Genshin Impact character data from the specified URL.
+2. Extracts relevant information from the webpage.
+3. Saves the data into a CSV file (`genshin_characters.csv`).
+
+By default, the URL used is:
+
+```
+https://genshin-impact.fandom.com/wiki/Characters
+```
+
+### API Endpoint
+
+The `/genshin_characters` endpoint serves the character data from the CSV file in JSON format. If the CSV file is missing, the endpoint returns a 404 error with an appropriate message.
+
+## Configuration
+
+CORS middleware is configured to allow requests from:
+
+```
+http://localhost:3000
+```
+
+You can modify this in the `app.add_middleware` configuration section of the code if needed.
+
+## CSV Output
+
+The scraped data is saved to a CSV file (`genshin_characters.csv`) with the following columns:
+
+- Icon URL
+- Name
+- Quality
+- Element
+- Weapon
+- Region
+- Model type
+
+## Contributing
+
+Contributions are welcome! Feel free to open issues or submit pull requests to improve this project.
+
+## License
+
+This project is licensed under the MIT License. See the `LICENSE` file for details.
