@@ -18,7 +18,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-def scrape_genshin_characters_to_csv(url, output_file):
+async def scrape_genshin_characters_to_csv(url, output_file):
     try:
         response = requests.get(url)
         response.raise_for_status()
@@ -65,12 +65,10 @@ def scrape_genshin_characters_to_csv(url, output_file):
 url = "https://genshin-impact.fandom.com/wiki/Characters"
 output_file = "genshin_characters.csv"
 
-scrape_genshin_characters_to_csv(url, output_file)
-
 @app.get("/genshin_characters")
 async def get_genshin_characters():
     if not os.path.exists(output_file):
-        return JSONResponse(content={"error": "Fichier CSV introuvable."}, status_code=404)
+        await scrape_genshin_characters_to_csv(url, output_file)
     
     characters_data = []
     with open(output_file, mode="r", encoding="utf-8") as file:
@@ -79,3 +77,7 @@ async def get_genshin_characters():
             characters_data.append(row)
 
     return JSONResponse(content={"characters": characters_data})
+
+@app.get("/health")
+async def check_server_health():
+    return { 'success': 'server is okay!!' }
