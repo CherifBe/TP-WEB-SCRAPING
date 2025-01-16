@@ -16,6 +16,35 @@ Ce projet est une application basée sur FastAPI qui extrait les données des pe
 - Fourniture d'un point d'accès API pour récupérer les données des personnages au format JSON.
 - Middleware CORS permettant les requêtes cross-origin (par exemple, pour une utilisation avec un frontend).
 
+## Pourquoi Nous Avons Choisi Requests + BeautifulSoup pour le Scraping
+
+Nous avons choisi Requests et BeautifulSoup pour le scraping web car :
+
+- **Requests** : Fournit un moyen simple et fiable d'effectuer des requêtes HTTP, de gérer les réponses et de traiter les erreurs.
+- **BeautifulSoup** : Offre des outils puissants et intuitifs pour analyser et naviguer dans le HTML, facilitant l'extraction des données nécessaires depuis les pages web.
+- Ces bibliothèques sont légères, bien documentées et largement utilisées, ce qui les rend idéales pour construire une solution de scraping robuste et maintenable.
+
+## Analyse du Site
+
+- Le site semble majoritairement basé sur HTML statique, ce qui signifie que les données sont probablement visibles directement dans le code source (sans nécessiter de rendu JavaScript).
+- Les pages sont bien structurées, typiques des wikis (tableaux, listes, etc.).
+
+## Recommandation d'Outils
+
+Étant donné que le site ne semble pas nécessiter de rendu JavaScript complexe, voici mes recommandations :
+
+### BeautifulSoup + Requests (Meilleur Choix pour ce Cas)
+
+**Pourquoi :**
+
+- Le site semble statique et bien structuré.
+- BeautifulSoup excelle dans l'extraction d'informations d'HTML statique.
+
+**Avantages :**
+
+- Simple à configurer.
+- Parfait pour extraire des tableaux ou des listes structurées, comme les données des personnages de Genshin Impact.
+
 ## Prérequis
 
 - Python 3.8+

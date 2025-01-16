@@ -16,6 +16,35 @@ This project is a FastAPI-based application that scrapes character data from the
 - Provides an API endpoint to retrieve character data in JSON format.
 - CORS middleware to allow cross-origin requests (e.g., for use with a frontend).
 
+## Why We Chose Requests + BeautifulSoup for Scraping
+
+We chose Requests and BeautifulSoup for web scraping because:
+
+- **Requests**: Provides a simple and reliable way to make HTTP requests, handle responses, and manage errors.
+- **BeautifulSoup**: Offers powerful and intuitive tools for parsing and navigating HTML, making it easy to extract the necessary data from web pages.
+- These libraries are lightweight, well-documented, and widely used, making them ideal for building a robust and maintainable scraping solution.
+
+## Analysis of the Site
+
+- The site appears to be primarily based on static HTML, meaning the data is likely visible directly in the source code (no need for JavaScript rendering).
+- Pages are well-structured, typical of wikis (tables, lists, etc.).
+
+## Tool Recommendation
+
+Given that the site does not seem to require complex JavaScript rendering, here are our recommendations:
+
+### BeautifulSoup + Requests (Best Choice for This Case)
+
+**Why:**
+
+- The site appears static and well-structured.
+- BeautifulSoup excels at extracting information from static HTML.
+
+**Advantages:**
+
+- Simple to set up.
+- Perfect for extracting structured tables or lists, such as Genshin Impact character data.
+
 ## Requirements
 
 - Python 3.8+
