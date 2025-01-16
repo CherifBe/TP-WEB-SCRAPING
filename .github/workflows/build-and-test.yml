@@ -23,13 +23,13 @@ jobs:
 
     - name: Install dependencies
       run: |
-        cd backend
+        cd server
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
     - name: Run backend server test
       run: |
-        cd backend
+        cd server
         uvicorn main:app --host 0.0.0.0 --port 8000 --lifespan on --no-access-log &
         sleep 5
         curl -f http://127.0.0.1:8000 || exit 1
@@ -48,12 +48,12 @@ jobs:
 
     - name: Install dependencies
       run: |
-        cd frontend
+        cd client
         npm install
 
     - name: Run frontend server test
       run: |
-        cd frontend
+        cd client
         npm start &
         sleep 10
         curl -f http://127.0.0.1:3000 || exit 1
