@@ -1,9 +1,9 @@
-import requests
 from bs4 import BeautifulSoup
 import csv
+import requests
 
 class ScraperService:
-    async def scrape_genshin_characters_to_csv(url, output_file):
+    async def scrape_genshin_characters_to_csv(self, url: str, output_file: str):
         try:
             response = requests.get(url)
             response.raise_for_status()
@@ -41,8 +41,11 @@ class ScraperService:
                 writer.writerows(rows)
 
             print(f"Données des personnages Genshin enregistrées dans le fichier : {output_file}")
+            return True, "Good"
 
         except requests.exceptions.RequestException as e:
             print(f"Erreur lors de la requête HTTP : {e}")
+            return False, e
         except Exception as e:
             print(f"Une erreur est survenue : {e}")
+            return False, e
